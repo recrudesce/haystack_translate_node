@@ -8,6 +8,7 @@ class TranslateQuery(BaseComponent):
     def __init__(
         self,
         api_key: str = "",
+        base_lang: Optional[str] = "en",
         location: Optional[str] = "uksouth",
         azure_translate_endpoint: Optional[
             str
@@ -17,6 +18,7 @@ class TranslateQuery(BaseComponent):
         self.api_key = api_key
         self.location = location
         self.azure_translate_endpoint = azure_translate_endpoint
+        self.base_lang = base_lang
 
         self.headers = {
             "Ocp-Apim-Subscription-Key": self.api_key,
@@ -36,17 +38,15 @@ class TranslateQuery(BaseComponent):
             self.detect_url, params=self.params, headers=self.headers, json=body
         )
         detect_response = detect_request.json()
-        print(self.api_key + "\n-----------------")
-        print(str(detect_response) + "\n--------------")
+
         src_lng = detect_response[0]["language"]
 
-        translate_params = "?from=" + src_lng + "&to=en"
+        translate_params = "?from=" + src_lng + "&to=" + self.base_lang
         body = [{"text": query}]
 
         translate_url = (
             self.azure_translate_endpoint + self.translate_path + translate_params
         )
-        print("---" + translate_url)
         translate_request = requests.post(
             translate_url, params=self.params, headers=self.headers, json=body
         )
@@ -66,14 +66,19 @@ class TranslateQuery(BaseComponent):
 class TranslateAnswer(BaseComponent):
     def __init__(
         self,
-        location: str = "uksouth",
         api_key: str = "",
-        azure_translate_endpoint: str = "https://api.cognitive.microsofttranslator.com/",
+        base_lang: Optional[str] = "en",
+        location: Optional[str] = "uksouth",
+        azure_translate_endpoint: Optional[
+            str
+        ] = "https://api.cognitive.microsofttranslator.com/",
     ):
         super().__init__()
         self.azure_translate_endpoint = azure_translate_endpoint
         self.api_key = api_key
         self.location = location
+        self.base_lang = base_lang
+
         self.headers = {
             "Ocp-Apim-Subscription-Key": self.api_key,
             "Ocp-Apim-Subscription-Region": self.location,
@@ -88,7 +93,7 @@ class TranslateAnswer(BaseComponent):
     outgoing_edges = 1
 
     def run(self, in_lang: list, results: list, **kwargs):
-        translate_params = "?from=en&to=" + in_lang[0]
+        translate_params = "?from=" + self.base_lang + "&to=" + in_lang[0]
         body = [{"text": results[0]}]
 
         translate_url = (
