@@ -16,6 +16,8 @@ pipel.add_node(component=prompt_node, name="prompt_node", inputs=["Retriever"])
 pipel.add_node(component=translate_answer, name="TranslateAnswer", inputs=["prompt_node"])
 ```
 
+`location` and `azure_translate_endpoint` are optional, and will default to `uksouth` and `https://api.cognitive.microsofttranslator.com/` respectively.
+
  - TranslateQuery will determine the language of the query, and assign it to the `in_lang` JSON value.
  - TranslateQuery will take the original query, in any language, and assign it to the `in_query` JSON value.
  - TranslateQuery will overwrite the original `query` JSON value with the translated English value
