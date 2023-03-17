@@ -1,10 +1,12 @@
 # haystack_translate_node
 An Azure Translation node for Haystack - you will need this configured in your Azure subscription: https://learn.microsoft.com/en-us/azure/cognitive-services/translator/translator-overview
 
+git clone the repo somewhere, change to the directory, then `pip install -e '.'`
+
 Include in your pipeline as follows
 
 ```python
-from translate import TranslateAnswer, TranslateQuery
+from haystack_translate_node import TranslateAnswer, TranslateQuery
 
 translate_query = TranslateQuery(api_key="<yourapikey>", location="<yourazureregion>", azure_translate_endpoint="<yourazureendpoint>", base_lang="en")
 translate_answer = TranslateAnswer(api_key="<yourapikey>", location="<yourazureregion>", azure_translate_endpoint="<yourazureendpoint>", base_lang="en")
