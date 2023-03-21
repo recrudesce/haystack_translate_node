@@ -86,8 +86,6 @@ class TranslateAnswer(BaseComponent):
             "X-ClientTraceId": str(uuid.uuid4()),
         }
         self.params = {"api-version": "3.0"}
-        self.detectpath = "/detect"
-        self.detect_url = azure_translate_endpoint + self.detectpath
         self.translate_path = "/translate"
 
     outgoing_edges = 1
